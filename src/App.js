@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
+import Grid from '@material-ui/core/Grid';
+import Container from '@material-ui/core/Container';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+import SearchBar from './components/SearchBar';
+import UserDisplay from './components/UserDisplay';
+
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      formSubmitted: false,
       followedUsers: [],
       baseUrl: 'http://localhost:5000',
     }
 
     this.fetchFollowedUsers = this.fetchFollowedUsers.bind(this);
-    this.calculateFollowTimespan = this.calculateFollowTimespan.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -20,47 +27,46 @@ class App extends Component {
   }
 
   fetchFollowedUsers() {
-    const username = document.getElementById('usernameInput').value;
-    axios.get(`${this.state.baseUrl}/timeline/${username}`)
-      .then(res => {
-        console.log(res);
-        this.setState({
-          followedUsers: res.data.data.follow_list,
-        });
-      })
-      .catch(error => console.error(error));
-  }
-
-  calculateFollowTimespan(dateString) {
-    const date = dateString.split('T');
-    const followDate = date[0].split('-');
-    const month = Number(followDate[1]) - 1;
-    const followTime = date[1].split(':');
-    const seconds = followTime[2].slice(0, 2);
-    const msPerDay = 24 * 60 * 60 * 1000;
-    const followed = new Date(followDate[0], month, followDate[2], followTime[0], followTime[1], seconds);
-    const now = new Date();
-    const numberOfDays = (now.getTime() - followed.getTime()) / msPerDay;
-    return numberOfDays;
+    this.setState({
+      formSubmitted: true,
+      followedUsers: [],
+    }, () => {
+      const username = document.getElementById('usernameInput').value;
+      axios.get(`${this.state.baseUrl}/timeline/${username}`)
+        .then(res => {
+          console.log(res);
+          this.setState({
+            followedUsers: res.data.data.follow_list,
+          });
+        })
+        .catch(error => console.error(error));
+    });
   }
 
   render() {
     const followedUsers = this.state.followedUsers.map(user => (
-      <tr key={user['to_id']}>
-        <td>{user['to_name']}</td>
-        <td>{user['followed_at']}</td>
-        <td>{this.calculateFollowTimespan(user['followed_at'])} days</td>
-      </tr>
+      <UserDisplay key={user['to_id']} user={user} />
     )); 
     return (
       <div className="App">
-        <input id='usernameInput' placeholder='Username' type='text' />
-        <button id='submitUsernameForm' onClick={this.fetchFollowedUsers}>Submit</button>
-        <table>
-          <tbody>
-            {followedUsers}
-          </tbody>
-        </table>
+        <Container maxWidth='md'>
+          <Grid
+            container
+            justify='center'
+            alignItems='center'
+          >
+            <Grid item xs={6}>
+              <SearchBar onSubmit={this.fetchFollowedUsers} />
+            </Grid>
+          </Grid>
+          {
+            (this.state.formSubmitted && this.state.followedUsers.length === 0) ?
+            <CircularProgress style={{ marginTop: '60px' }} />
+            :
+            <div style={{ display: 'None' }}></div>
+          }
+          {followedUsers}
+        </Container>
       </div>
     );
   }
