@@ -16,7 +16,7 @@ class App extends Component {
     this.state = {
       formSubmitted: false,
       followedUsers: [],
-      baseUrl: 'http://localhost:5000',
+      baseUrl: 'https://api.ttvtimeline.ga',
     }
 
     this.fetchFollowedUsers = this.fetchFollowedUsers.bind(this);
