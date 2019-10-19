@@ -19,7 +19,7 @@ function UserDisplay(props) {
             <p>{props.user['followed_at']}</p>
           </Grid>
           <Grid item xs={6}>
-            <p>{props.user['follow_duration']} days</p>
+            <p>{props.user['follow_duration']}</p>
           </Grid>
         </Grid>
       </Paper>
