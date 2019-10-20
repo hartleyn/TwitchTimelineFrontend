@@ -3,7 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 
-function UserDisplay(props) {
+const UserDisplay = (props) => {
   return (
     <div className='userDisplay'>
       <Paper className='userDisplayPaper'>
@@ -24,7 +24,7 @@ function UserDisplay(props) {
         </Grid>
       </Paper>
     </div>
-  )
+  );
 }
 
 export default UserDisplay;
