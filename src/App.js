@@ -48,7 +48,7 @@ class App extends Component {
         })
         .catch(error => {
           console.error(error);
-          this.setSate({
+          this.setState({
             noUserFound: true,
           });
         });
