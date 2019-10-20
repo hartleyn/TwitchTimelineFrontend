@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 
 const CustomizedInputBase = (props) => {
   const classes = useStyles();
-
+  
   return (
     <Paper className={classes.root}>
       <InputBase

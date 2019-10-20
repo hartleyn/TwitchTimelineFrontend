@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -15,6 +16,7 @@ class App extends Component {
 
     this.state = {
       formSubmitted: false,
+      noUserFound: false,
       followedUsers: [],
       baseUrl: 'https://api.ttvtimeline.ga',
     }
@@ -33,6 +35,7 @@ class App extends Component {
   fetchFollowedUsers() {
     this.setState({
       formSubmitted: true,
+      noUserFound: false,
       followedUsers: [],
     }, () => {
       const username = document.getElementById('usernameInput').value;
@@ -43,7 +46,12 @@ class App extends Component {
             followedUsers: res.data.data.follow_list,
           });
         })
-        .catch(error => console.error(error));
+        .catch(error => {
+          console.error(error);
+          this.setSate({
+            noUserFound: true,
+          });
+        });
     });
   }
 
@@ -64,8 +72,14 @@ class App extends Component {
             </Grid>
           </Grid>
           {
-            (this.state.formSubmitted && this.state.followedUsers.length === 0) ?
+            (this.state.formSubmitted && this.state.followedUsers.length === 0 && !this.state.noUserFound) ?
             <CircularProgress style={{ marginTop: '60px' }} />
+            :
+            <div style={{ display: 'None' }}></div>
+          }
+          {
+            (this.state.noUserFound) ?
+            <Paper style={{ marginTop: '60px', padding: '10px' }}>No user found.</Paper>
             :
             <div style={{ display: 'None' }}></div>
           }
