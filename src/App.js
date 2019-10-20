@@ -23,9 +23,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    let username = document.getElementById('usernameInput').value;
     document.getElementById('usernameInput').onkeydown = e => {
-      if(e.keyCode === 13 && username !== '') {
+      if(e.keyCode === 13 && document.getElementById('usernameInput').value !== '') {
         this.fetchFollowedUsers();
       } 
     };
