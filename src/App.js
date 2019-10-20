@@ -44,9 +44,15 @@ class App extends Component {
   }
 
   render() {
+    const username = document.getElementById('usernameInput').value;
+    document.getElementById('usernameInput').onkeydown = e => {
+      if(e.keyCode === 13 && username !== '') {
+        this.fetchFollowedUsers();
+      } 
+    };
     const followedUsers = this.state.followedUsers.map(user => (
       <UserDisplay key={user['to_id']} user={user} />
-    )); 
+    ));
     return (
       <div className="App">
         <Container maxWidth='md'>
