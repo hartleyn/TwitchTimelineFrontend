@@ -18,7 +18,7 @@ class App extends Component {
       formSubmitted: false,
       noUserFound: false,
       followedUsers: [],
-      baseUrl: 'https://api.ttvtimeline.ga',
+      baseUrl: 'https://hw1.nicekubes.ga',
     }
 
     this.fetchFollowedUsers = this.fetchFollowedUsers.bind(this);
