@@ -18,7 +18,7 @@ class App extends Component {
       formSubmitted: false,
       noUserFound: false,
       followedUsers: [],
-      baseUrl: 'https://hw1.nicekubes.ga',
+      baseUrl: 'https://hw1.nicekubes.com',
     }
 
     this.fetchFollowedUsers = this.fetchFollowedUsers.bind(this);
@@ -39,7 +39,7 @@ class App extends Component {
       followedUsers: [],
     }, () => {
       const username = document.getElementById('usernameInput').value;
-      axios.get(`${this.state.baseUrl}/timeline/${username}`)
+      axios.get(`${this.state.baseUrl}/v2/timeline/${username}`)
         .then(res => {
           console.log(res);
           this.setState({
