@@ -3,6 +3,7 @@ import './App.css';
 import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -32,6 +33,14 @@ class App extends Component {
     };
   }
 
+  handleFilterChange = (e) => {
+    if (/^[a-z0-9]+$/i.exec(e.target.value) || e.target.value === '') {
+      this.setState({
+        filter: e.target.value,
+      });
+    }
+  }
+
   fetchFollowedUsers() {
     this.setState({
       formSubmitted: true,
@@ -56,7 +65,11 @@ class App extends Component {
   }
 
   render() {
-    const followedUsers = this.state.followedUsers.map(user => (
+    const followedUsers = this.state.followedUsers.filter(user => {
+      const regex = new RegExp(this.state.filter, 'i');
+      return regex.exec(user['to_name'])
+    })
+    .map(user => (
       <UserDisplay key={user['to_id']} user={user} />
     ));
     return (
@@ -64,6 +77,7 @@ class App extends Component {
         <Container maxWidth='md'>
           <Grid
             container
+            direction='row'
             justify='center'
             alignItems='center'
           >
@@ -80,6 +94,22 @@ class App extends Component {
           {
             (this.state.noUserFound) ?
             <Paper style={{ marginTop: '60px', padding: '10px' }}>No user found.</Paper>
+            :
+            <div style={{ display: 'None' }}></div>
+          }
+          {
+            (this.state.formSubmitted && this.state.followedUsers.length > 0) ?
+            <Grid
+              container
+              direction='row'
+              justify='center'
+              alignItems='center'
+              style={{ marginBottom: '10px' }}
+            >
+              <Grid item xs={3}>
+                <TextField id="filter" label="filter results" type="search" size="small" onChange={this.handleFilterChange} />
+              </Grid>
+            </Grid>
             :
             <div style={{ display: 'None' }}></div>
           }
